@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Profil pengguna resmi Karya Pay BP2MI (Karyawan, Istri, Calon Istri, Admin)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique User UID" },
+        "name": { "type": "string", "description": "Nama lengkap pengguna" },
+        "email": { "type": "string", "description": "Alamat email resmi pengguna" },
+        "role": { 
+          "type": "string", 
+          "enum": ["KARYAWAN", "ISTRI_KARYAWAN", "CALON_ISTRI", "ADMIN"],
+          "description": "Peran resmi di lingkungan BP2MI" 
+        },
+        "nipOrNik": { "type": "string", "description": "NIP BP2MI atau NIK KTP" },
+        "departmentOrRelation": { "type": "string", "description": "Unit kerja atau relasi keluarga" },
+        "accountNumber": { "type": "string", "description": "Nomor rekening dompet digital Karya Pay" },
+        "saldoUtama": { "type": "number", "description": "Saldo utama nasabah (Rp)" },
+        "saldoTunjangan": { "type": "number", "description": "Saldo tunjangan resmi BP2MI (Rp)" },
+        "phone": { "type": "string", "description": "Nomor telepon aktif" },
+        "bankName": { "type": "string", "description": "Bank penampung pencairan dana" },
+        "bankAccountNumber": { "type": "string", "description": "Nomor rekening bank penampung" },
+        "createdAt": { "type": "string", "description": "Waktu registrasi pengguna" }
+      },
+      "required": ["id", "name", "email", "role", "accountNumber", "saldoUtama", "saldoTunjangan"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Catatan transaksi keuangan, mutasi, top up, transfer, dan pencairan tunjangan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Kode transaksi unik" },
+        "userId": { "type": "string", "description": "UID pemohon transaksi" },
+        "userName": { "type": "string", "description": "Nama pemohon" },
+        "userRole": { "type": "string", "description": "Peran pemohon" },
+        "userAccountNumber": { "type": "string", "description": "Nomor rekening dompet pemohon" },
+        "type": { 
+          "type": "string", 
+          "enum": ["TOP_UP", "TRANSFER", "TARIK_TUNJANGAN", "PEMBAYARAN", "QRIS", "PENYESUAIAN_ADMIN"],
+          "description": "Tipe transaksi" 
+        },
+        "title": { "type": "string", "description": "Judul transaksi" },
+        "description": { "type": "string", "description": "Keterangan detail" },
+        "amount": { "type": "number", "description": "Nominal transaksi (Rp)" },
+        "adminFee": { "type": "number", "description": "Biaya administrasi (Rp)" },
+        "total": { "type": "number", "description": "Total nominal yang diproses" },
+        "sourceBalance": { "type": "string", "enum": ["SALDO_UTAMA", "SALDO_TUNJANGAN"] },
+        "destinationInfo": { "type": "string", "description": "Tujuan dana atau informasi rekening" },
+        "status": { "type": "string", "enum": ["PENDING", "SUCCESS", "REJECTED"] },
+        "createdAt": { "type": "string", "description": "Waktu permohonan transaksi diajukan" },
+        "reviewedBy": { "type": "string", "description": "Email admin yang memverifikasi transaksi" },
+        "reviewedAt": { "type": "string", "description": "Waktu transaksi disetujui / ditolak" },
+        "rejectionReason": { "type": "string", "description": "Alasan jika transaksi ditolak admin" },
+        "proofNote": { "type": "string", "description": "Nomor referensi atau catatan bukti transfer" },
+        "requiredSaldoUtamaThreshold": { "type": "number", "description": "Syarat minimal saldo utama (3.5%)" },
+        "currentSaldoUtamaAtRequest": { "type": "number", "description": "Saldo utama saat transaksi diajukan" }
+      },
+      "required": ["id", "userId", "type", "amount", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "Data profil akun nasabah pengguna dan saldo terverifikasi"
+    },
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "Transaction" },
+      "description": "Catatan transaksi dan antrean verifikasi manual admin"
+    }
+  }
+}

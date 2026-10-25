@@ -1,0 +1,6 @@
+{
+  "name": "BP2MI Pay Mobile - Dompet Digital Karyawan & Keluarga",
+  "description": "Aplikasi perbankan dan dompet digital khusus karyawan, istri, dan calon istri keluarga besar BP2MI dengan sistem dual balance, aturan penarikan tunjangan 3.5%, dan verifikasi transaksi admin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

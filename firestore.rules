@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection: Allow read and write for banking registration, profiles, and balance updates
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Transactions collection: Allow read and write for transaction submissions, mutation lists, and admin approvals
+    match /transactions/{transactionId} {
+      allow read, write: if true;
+    }
+
+    // Test connection doc
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
